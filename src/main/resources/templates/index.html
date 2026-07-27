@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Weather App</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="/images/favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/responsive.css}">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Background Layer -->
+<div class="background-container">
+
+    <video
+        id="weatherVideo"
+        autoplay
+        muted
+        loop
+        playsinline>
+
+        <source
+            th:src="@{|/videos/${backgroundVideo}|}"
+            type="video/mp4">
+
+    </video>
+
+    <div class="background-overlay"></div>
+
+</div>
+
+<div class="container-fluid px-3 px-md-5">
+
+    <nav class="weather-navbar">
+
+        <div class="brand">
+
+            <i class="bi bi-cloud-sun-fill"></i>
+
+            <span>WeatherPro</span>
+
+        </div>
+
+        <form action="/weather" method="get" class="search-wrapper">
+
+            <button type="submit" class="search-submit">
+                <i class="bi bi-search"></i>
+            </button>
+
+            <input
+                type="text"
+                name="city"
+                id="citySearchInput"
+                placeholder="Search for a city..."
+                autocomplete="off"
+                required>
+
+            <div id="citySuggestions" class="city-suggestions"></div>
+
+        </form>
+
+        <button
+                id="locationBtn"
+                type="button"
+                class="location-btn">
+
+            <i class="bi bi-geo-alt"></i>
+
+            My Location
+
+        </button>
+
+    </nav>
+
+    <div
+            th:if="${error}"
+            class="container mt-3">
+
+        <div class="alert alert-danger shadow-lg text-center">
+
+            <i class="bi bi-exclamation-triangle-fill"></i>
+
+            <span th:text="${error}"></span>
+
+        </div>
+
+    </div>
+
+    <section class="container-fluid py-5">
+
+        <div class="row g-4 align-items-start">
+
+            <!-- LEFT HERO CARD -->
+            <div class="col-lg-4">
+
+                <div class="hero-card glass-card">
+
+                    <h2 class="hero-city">
+                        <i class="bi bi-geo-alt-fill"></i>
+
+                        <span th:text="${weather != null ? weather.name + ', ' + weather.sys.country : 'Search a city'}"></span>
+                    </h2>
+
+                    <h1 class="hero-temp"
+                        th:text="${weather != null ? #numbers.formatDecimal(weather.main.temp,1,0)+'°' : '--°'}">
+                    </h1>
+
+                    <img
+                            th:if="${weather != null}"
+                            class="hero-icon"
+                            th:src="@{|https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png|}">
+
+                    <p class="hero-description text-capitalize"
+                    th:text="${weather != null ? weather.weather[0].description : '--'}">
+                    </p>
+
+                    <div class="hero-datetime">
+
+                        <span id="currentDate"></span>
+
+                        <span class="dot">•</span>
+
+                        <span id="currentTime"></span>
+
+                    </div>
+
+                    <div class="hero-range" th:if="${weather!=null}">
+
+                        <span>
+
+                            H:
+                            <strong th:text="${#numbers.formatDecimal(weather.main.temp_max,1,1)}"></strong>°
+
+                        </span>
+
+                        <span>
+
+                            L:
+                            <strong th:text="${#numbers.formatDecimal(weather.main.temp_min,1,1)}"></strong>°
+
+                        </span>
+
+                        <span>
+
+                            Feels:
+                            <strong th:text="${#numbers.formatDecimal(weather.main.feels_like,1,1)}"></strong>°
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT GRID -->
+            <div class="col-lg-8">
+
+                <div class="row g-4 weather-details">
+
+                    <!-- Temperature -->
+                    <div class="col-6 col-lg-3">
+                        
+                        <div class="glass-card">
+
+                            <div class="card-icon">
+                                <i class="bi bi-thermometer-half"></i>
+                            </div>
+
+                            <div class="card-title">
+                                Temperature
+                            </div>
+
+                            <div class="card-value"
+                                th:text="${weather != null ? #numbers.formatDecimal(weather.main.temp,1,1)+'°C' : '--'}">
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="card-description">
+                                Current air temperature
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Feels Like -->
+                    <div class="col-6 col-lg-3">
+
+                        <div class="glass-card">
+
+                            <div class="card-icon">
+                                <i class="bi bi-emoji-smile"></i>
+                            </div>
+
+                            <div class="card-title">
+                                Feels Like
+                            </div>
+
+                            <div class="card-value"
+                                th:text="${weather!=null?weather.main.feels_like+'°C':'--'}">
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="card-description">
+                                Perceived outdoor temperature
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Humidity -->
+                    <div class="col-6 col-lg-3">
+
+                        <div class="glass-card">
+
+                            <div class="card-icon">
+                                <i class="bi bi-droplet-fill"></i>
+                            </div>
+
+                            <div class="card-title">
+                                Humidity
+                            </div>
+
+                            <div class="card-value"
+                                th:text="${weather!=null?weather.main.humidity+'%':'--'}">
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="card-description">
+                                Relative moisture in the air
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Wind -->
+                    <div class="col-6 col-lg-3">
+
+                        <div class="glass-card">
+
+                            <div class="card-icon">
+                                <i class="bi bi-wind"></i>
+                            </div>
+
+                            <div class="card-title">
+                                Wind
+                            </div>
+
+                            <div class="card-value"
+                                th:text="${weather!=null?weather.wind.speed+' m/s':'--'}">
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="card-description">
+                                Current wind speed
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Pressure -->
+                    <div class="col-6 col-lg-3">
+
+                        <div class="glass-card">
+
+                            <div class="card-icon">
+                                <i class="bi bi-speedometer2"></i>
+                            </div>
+
+                            <div class="card-title">
+                                Pressure
+                            </div>
+
+                            <div class="card-value"
+                                th:text="${weather!=null?weather.main.pressure+' hPa':'--'}">
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="card-description">
+                                Atmospheric pressure
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Visibility -->
+                    <div class="col-6 col-lg-3">
+
+                        <div class="glass-card">
+
+                            <div class="card-icon">
+                                <i class="bi bi-eye"></i>
+                            </div>
+
+                            <div class="card-title">
+                                Visibility
+                            </div>
+
+                            <div class="card-value"
+                                th:text="${weather!=null?weather.visibility/1000+' km':'--'}">
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="card-description">
+                                Maximum visible distance
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Sunrise -->
+                    <div class="col-6 col-lg-3">
+
+                        <div class="glass-card">
+
+                            <div class="card-icon">
+                                <i class="bi bi-sunrise"></i>
+                            </div>
+
+                            <div class="card-title">
+                                Sunrise
+                            </div>
+
+                            <div class="card-value"
+                                th:text="${weather!=null?weather.formattedSunrise:'--'}">
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="card-description">
+                                Today's sunrise time
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Sunset -->
+                    <div class="col-6 col-lg-3">
+
+                        <div class="glass-card">
+
+                            <div class="card-icon">
+                                <i class="bi bi-sunset"></i>
+                            </div>
+
+                            <div class="card-title">
+                                Sunset
+                            </div>
+
+                            <div class="card-value"
+                                th:text="${weather!=null?weather.formattedSunset:'--'}">
+                            </div>
+
+                            <div class="card-divider"></div>
+
+                            <div class="card-description">
+                                Today's sunset time
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <div class="glass-card hourly-card mt-4" th:if="${hourlyForecast != null && !hourlyForecast.isEmpty()}">
+
+        <div class="section-title">
+
+            <i class="bi bi-clock-history"></i>
+
+            <span>Next 24 Hours</span>
+
+        </div>
+        
+        <div class="hourly-scroll" id="hourlyScroll">
+
+            <div class="hourly-item" th:each="hour, iterStat : ${hourlyForecast}">
+
+                <div class="hour-time"
+                    th:text="${iterStat.index == 0 ? 'Now' : hour.formattedTime}">
+                </div>
+
+                <img th:src="'https://openweathermap.org/img/wn/' + ${hour.weather[0].icon} + '.png'"
+                    alt="Weather Icon">
+
+                <div class="hour-temp">
+                    <span th:text="${#numbers.formatDecimal(hour.main.temp,0,0)}"></span>°
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <section class="bottom-section mt-5 mb-5">
+
+        <div class="row g-4 align-items-stretch">
+
+            <!-- Recent Searches -->
+            <div class="col-lg-3 d-flex">
+
+                <div class="glass-card bottom-card">
+
+                    <div class="section-title">
+
+                        <i class="bi bi-clock-history"></i>
+
+                        <span>Recent Searches</span>
+
+                    </div>
+
+                    <div id="recentSearchList"></div>
+
+                </div>
+
+            </div>
+
+            <!-- 5-Day Forecast -->
+            <div class="col-lg-6 d-flex">
+
+                <div class="glass-card bottom-card">
+
+                    <div class="section-title">
+
+                        <i class="bi bi-calendar3"></i>
+
+                        <span>5-Day Forecast</span>
+
+                    </div>
+
+                    <div class="forecast-list">
+
+                        <div class="forecast-row"
+                            th:each="day : ${forecastDays}">
+
+                            <!-- Day -->
+                            <div class="forecast-day"
+                                th:text="${day.day}">
+                            </div>
+
+                            <!-- Weather -->
+                            <div class="forecast-weather">
+
+                                <img
+                                    class="forecast-icon"
+                                    th:src="@{|https://openweathermap.org/img/wn/${day.icon}@2x.png|}">
+
+                                <span
+                                    class="forecast-description"
+                                    th:text="${day.description}">
+                                </span>
+
+                            </div>
+
+                            <!-- Temperature Range -->
+                            <div class="forecast-range">
+
+                                <span class="temp-min"
+                                    th:text="${#numbers.formatDecimal(day.minTemp,0,0)}">
+                                </span>
+
+                                <div class="range-track">
+
+                                    <div class="range-fill"
+                                        th:style="'left:' + ${day.barStart} + '%; width:' + ${day.barWidth} + '%;'">
+                                    </div>
+
+                                </div>
+
+                                <span class="temp-max"
+                                    th:text="${#numbers.formatDecimal(day.maxTemp,0,0)}">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Weather Tips -->
+            <div class="col-lg-3 d-flex">
+
+                <div class="glass-card bottom-card weather-tip-card">
+
+                    <div class="section-title">
+                        <i class="bi bi-lightbulb-fill"></i>
+                        Weather Tips
+                    </div>
+
+                    <div class="weather-tip-icon"
+                        th:text="${weatherTipIcon}">
+                    </div>
+
+                    <div class="weather-tip-text"
+                        th:text="${weatherTip}">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script th:inline="javascript">
+    const cityTimezone = [[${weather != null ? weather.timezone : 19800}]];
+</script>
+
+<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/js/clock.js}"></script>
+<script th:src="@{/js/recent-search.js}"></script>
+
+</body>
+</html>

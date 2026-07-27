@@ -1,0 +1,386 @@
+/* ==========================================================
+   WeatherPro — Responsive Overrides
+   Loaded AFTER style.css, so these rules take priority
+   at their respective breakpoints.
+========================================================== */
+
+/* ==========================================================
+   Large tablets / small laptops  (≤ 991.98px)
+========================================================== */
+@media (max-width: 991.98px){
+
+    .container-fluid{
+        padding-left:16px;
+        padding-right:16px;
+    }
+
+    /* Navbar: allow wrapping instead of squeezing everything in one row */
+    .weather-navbar{
+        flex-wrap:wrap;
+        row-gap:14px;
+        padding:16px 20px;
+    }
+
+    .search-wrapper{
+        order:3;
+        flex:1 1 100%;
+        max-width:100%;
+    }
+
+    .location-btn{
+        white-space:nowrap;
+    }
+
+    /* Hero card: drop the fixed height, let content define it */
+    .hero-card{
+        height:auto;
+        min-height:0;
+        padding:35px 28px;
+    }
+
+    /* Detail cards grid: drop fixed height, let cards size naturally */
+    .weather-details{
+        height:auto;
+    }
+
+    .weather-details .glass-card{
+        height:auto;
+        min-height:230px;
+        padding:22px;
+    }
+
+    .hero-temp{
+        font-size:5rem;
+    }
+}
+
+/* ==========================================================
+   Tablets / large phones  (≤ 767.98px)
+========================================================== */
+@media (max-width: 767.98px){
+
+    /* Stack navbar items vertically, center brand */
+    .weather-navbar{
+        flex-direction:column;
+        align-items:stretch;
+        padding:16px;
+        border-radius:22px;
+    }
+
+    .brand{
+        justify-content:center;
+        display:flex;
+        font-size:20px;
+    }
+
+    .location-btn{
+        justify-content:center;
+        height:50px;
+    }
+
+    .search-wrapper input{
+        height:50px;
+    }
+
+    .search-submit{
+        left:16px;
+    }
+
+    /* Hero content scaled down */
+    .hero-card{
+        padding:30px 22px;
+    }
+
+    .hero-city{
+        font-size:1.4rem;
+    }
+
+    .hero-temp{
+        font-size:4rem;
+    }
+
+    .hero-icon{
+        width:110px;
+    }
+
+    .hero-description{
+        font-size:1.15rem;
+        margin-bottom:14px;
+    }
+
+    .hero-datetime{
+        font-size:.95rem;
+        margin:14px 0;
+        flex-wrap:wrap;
+    }
+
+    .hero-range{
+        flex-wrap:wrap;
+        row-gap:10px;
+        column-gap:22px;
+        font-size:16px;
+    }
+
+    /* Detail cards */
+    .weather-details .glass-card{
+        min-height:200px;
+        padding:18px;
+    }
+
+    .card-icon{
+        font-size:34px;
+        margin-top:12px;
+        margin-bottom:2px;
+    }
+
+    .card-title{
+        font-size:14px;
+    }
+
+    .card-value{
+        font-size:22px;
+        margin-bottom:6px;
+    }
+
+    .card-description{
+        font-size:13px;
+        max-width:150px;
+    }
+
+    /* Bottom section cards */
+    .bottom-card{
+        padding:22px;
+    }
+
+    .section-title{
+        font-size:19px;
+        margin-bottom:22px;
+    }
+
+    /* Recent search rows */
+    .recent-city{
+        padding:14px 10px;
+    }
+
+    .recent-left span{
+        font-size:18px;
+    }
+
+    .recent-left i{
+        font-size:20px;
+    }
+
+    /* 5-day forecast row: switch to two-line layout */
+    .forecast-row{
+        grid-template-columns:56px 1fr;
+        grid-template-areas:
+            "day weather"
+            "range range";
+        row-gap:10px;
+    }
+
+    .forecast-day{
+        grid-area:day;
+        font-size:15px;
+        width:auto;
+    }
+
+    .forecast-weather{
+        grid-area:weather;
+    }
+
+    .forecast-description{
+        font-size:13px;
+    }
+
+    .forecast-icon{
+        width:36px !important;
+        max-width:36px;
+        max-height:36px;
+    }
+
+    .forecast-range{
+        grid-area:range;
+    }
+
+    /* Weather tip card */
+    .weather-tip-icon{
+        font-size:48px;
+        margin-bottom:14px;
+    }
+
+    .weather-tip-text{
+        font-size:17px;
+    }
+}
+
+/* ==========================================================
+   Small phones  (≤ 480px)
+========================================================== */
+@media (max-width: 480px){
+
+    .container-fluid{
+        padding-left:10px;
+        padding-right:10px;
+    }
+
+    .weather-navbar{
+        padding:14px;
+    }
+
+    .brand span{
+        font-size:16px;
+    }
+
+    .brand i{
+        font-size:24px;
+    }
+
+    .hero-card{
+        padding:26px 16px;
+        border-radius:22px;
+    }
+
+    .hero-temp{
+        font-size:3.2rem;
+    }
+
+    .hero-city{
+        font-size:1.15rem;
+    }
+
+    .hero-icon{
+        width:90px;
+    }
+
+    .hero-description{
+        font-size:1rem;
+    }
+
+    .hero-range{
+        gap:8px 16px;
+        font-size:14px;
+    }
+
+    /* Detail cards become a single column so nothing gets cramped */
+    .weather-details .row.g-4{
+        --bs-gutter-x:0.9rem;
+        --bs-gutter-y:0.9rem;
+    }
+
+    .weather-details .glass-card{
+        min-height:170px;
+        padding:16px;
+    }
+
+    .card-icon{
+        font-size:28px;
+        margin-top:8px;
+    }
+
+    .card-value{
+        font-size:19px;
+    }
+
+    .card-description{
+        font-size:12px;
+        max-width:130px;
+    }
+
+    .forecast-icon{
+        width:32px !important;
+        max-width:32px;
+        max-height:32px;
+    }
+
+    .temp-min,
+    .temp-max{
+        width:34px;
+        font-size:15px;
+    }
+
+    .weather-tip-icon{
+        font-size:40px;
+    }
+
+    .weather-tip-text{
+        font-size:15px;
+    }
+
+    .section-title{
+        font-size:17px;
+        flex-wrap:wrap;
+        text-align:center;
+    }
+}
+
+/* ==========================================================
+   Hourly forecast — responsive sizing
+   (new Apple-style strip, base rules live in style.css)
+========================================================== */
+@media (max-width:767.98px){
+
+    .hourly-item{
+        width:48px;
+        margin-left:12px;
+    }
+
+    .hourly-item img{
+        width:28px;
+        height:28px;
+    }
+
+    .hour-temp{
+        font-size:15px;
+    }
+
+    .hour-time{
+        font-size:13px;
+    }
+}
+
+/* ==========================================================
+   Extra-small phones  (≤ 360px)
+========================================================== */
+@media (max-width: 360px){
+
+    .hero-temp{
+        font-size:2.7rem;
+    }
+
+    .hero-range{
+        flex-direction:column;
+        align-items:center;
+        gap:6px;
+    }
+
+    .search-wrapper input{
+        font-size:14px;
+        padding-left:48px;
+    }
+
+    .location-btn{
+        padding:0 18px;
+        font-size:14px;
+    }
+}
+
+/* ==========================================================
+   Landscape phones (short height) — keep hero from
+   forcing excessive scroll
+========================================================== */
+@media (max-height: 480px) and (orientation: landscape){
+
+    .hero-card{
+        padding:20px;
+    }
+
+    .hero-icon{
+        width:70px;
+        margin:4px 0;
+    }
+
+    .hero-temp{
+        font-size:3rem;
+    }
+}
