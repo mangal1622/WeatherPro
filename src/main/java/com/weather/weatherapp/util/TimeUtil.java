@@ -9,12 +9,14 @@ public class TimeUtil {
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("hh:mm a");
 
+    private static final ZoneId INDIA_ZONE =
+            ZoneId.of("Asia/Kolkata");
+
     public static String formatUnixTime(long unixTime) {
 
         return Instant.ofEpochSecond(unixTime)
-                .atZone(ZoneId.systemDefault())
+                .atZone(INDIA_ZONE)
                 .format(FORMATTER);
 
     }
-
 }
