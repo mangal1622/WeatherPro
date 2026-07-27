@@ -64,6 +64,11 @@
                             TimeUtil.formatUnixTime(weatherResponse.getSys().getSunset()));
                 }
 
+                System.out.println("City: " + weatherResponse.getName());
+                System.out.println("Wind: " + weatherResponse.getWind().getSpeed());
+                System.out.println("Humidity: " + weatherResponse.getMain().getHumidity());
+                System.out.println("Timezone: " + weatherResponse.getTimezone());
+
                 return weatherResponse;
 
             } catch (HttpClientErrorException e) {
@@ -331,6 +336,11 @@
                     weatherResponse.setFormattedSunset(
                             TimeUtil.formatUnixTime(weatherResponse.getSys().getSunset()));
                 }
+
+                System.out.println("City: " + weatherResponse.getName());
+                System.out.println("Wind: " + weatherResponse.getWind().getSpeed());
+                System.out.println("Humidity: " + weatherResponse.getMain().getHumidity());
+                System.out.println("Timezone: " + weatherResponse.getTimezone());
 
                 return weatherResponse;
 
