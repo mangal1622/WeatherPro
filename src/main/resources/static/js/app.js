@@ -1,5 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const currentPath = window.location.pathname;
+    const isHomepage = currentPath === "/" || currentPath === "";
+
+    if (isHomepage && navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                window.location.href = `/weather/location?lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}`;
+            },
+            (error) => {
+                console.log("Geolocation denied or unavailable:", error.message);
+            }
+        );
+    }
+
     const locationBtn = document.getElementById("locationBtn");
 
     locationBtn.addEventListener("click", () => {

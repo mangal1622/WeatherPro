@@ -7,12 +7,13 @@
     <title>Weather App</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="/images/favicon.png">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/responsive.css}">
+    <link rel="stylesheet" th:href="@{/css/weather-chat.css}">
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -118,7 +119,7 @@
                     <img
                             th:if="${weather != null}"
                             class="hero-icon"
-                            th:src="@{|https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png|}">
+                            th:src="@{|https://openweathermap.org/img/wn/${weather.weather[0].icon ?: '01d'}@4x.png|}">
 
                     <p class="hero-description text-capitalize"
                     th:text="${weather != null ? weather.weather[0].description : '--'}">
@@ -410,7 +411,7 @@
                     th:text="${iterStat.index == 0 ? 'Now' : hour.formattedTime}">
                 </div>
 
-                <img th:src="'https://openweathermap.org/img/wn/' + ${hour.weather[0].icon} + '.png'"
+                <img th:src="@{|https://openweathermap.org/img/wn/${hour.weather[0].icon ?: '01d'}.png|}"
                     alt="Weather Icon">
 
                 <div class="hour-temp">
@@ -474,7 +475,7 @@
 
                                 <img
                                     class="forecast-icon"
-                                    th:src="@{|https://openweathermap.org/img/wn/${day.icon}@2x.png|}">
+                                    th:src="@{|https://openweathermap.org/img/wn/${day.icon ?: '01d'}@2x.png|}">
 
                                 <span
                                     class="forecast-description"
@@ -547,6 +548,7 @@
 <script th:src="@{/js/app.js}"></script>
 <script th:src="@{/js/clock.js}"></script>
 <script th:src="@{/js/recent-search.js}"></script>
+<script th:src="@{/js/weather-chat.js}"></script>
 
 </body>
 </html>

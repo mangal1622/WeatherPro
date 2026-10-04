@@ -20,9 +20,10 @@
     import org.springframework.web.client.ResourceAccessException;
     import com.weather.weatherapp.exception.WeatherServiceException;
 
-    import java.time.LocalDate;
-    import java.util.LinkedHashMap;
-    import java.util.Map;
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 
     @Service
@@ -266,12 +267,14 @@
 
             // Calculate week's min & max
             double weekMin = forecastDays.stream()
-                    .mapToDouble(ForecastDay::getMinTemp)
+                    .filter(Objects::nonNull)
+                    .mapToDouble(day -> day.getMinTemp())
                     .min()
                     .orElse(0);
 
             double weekMax = forecastDays.stream()
-                    .mapToDouble(ForecastDay::getMaxTemp)
+                    .filter(Objects::nonNull)
+                    .mapToDouble(day -> day.getMaxTemp())
                     .max()
                     .orElse(0);
 
