@@ -1,0 +1,29 @@
+# Vercel-specific Dockerfile for WeatherPro
+# Multi-stage build using Eclipse Temurin Java 26
+
+# ---------- Build stage ----------
+FROM eclipse-temurin:26-jdk AS build
+WORKDIR /app
+
+# Copy Maven wrapper and pom
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+RUN chmod +x mvnw
+# Resolve dependencies offline
+RUN ./mvnw dependency:go-offline -B
+
+# Copy source code and build the jar
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
+
+# ---------- Runtime stage ----------
+FROM eclipse-temurin:26-jre
+WORKDIR /app
+# Copy the built jar from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Expose default port (Vercel will set PORT env variable)
+EXPOSE 8080
+# Use the PORT environment variable if provided, fallback to 8080 (handled by Spring)
+ENTRYPOINT ["java","-jar","app.jar"]

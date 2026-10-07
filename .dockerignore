@@ -1,0 +1,8 @@
+# Exclude version control and build artifacts
+.git
+.gitignore
+.env
+target
+.idea
+.vscode
+*.log
